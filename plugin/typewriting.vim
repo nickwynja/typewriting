@@ -27,7 +27,7 @@ command! -range=% FixQuotes call <SID>FixQuotes(<line1>,<line2>)
 " Open draft
 function! OpenDraft()
     call typewriting#OpenDraft()
-endfunction    
+endfunction
 command! -nargs=0 OpenDraft call OpenDraft()
 
 " Return wc
@@ -43,36 +43,3 @@ function! Gwc()
     echom substitute(wc, '\n\+$', '', '')
 endfunction
 command! -nargs=0 Gwc call Gwc()
-
-" Lifted from vim-pencils
-" https://github.com/reedes/vim-pencil/blob/master/autoload/pencil.vim
-
-" ----------------------------------------------------------------------------
-" Skeleton Templates with UltiSnips
-" ----------------------------------------------------------------------------
-
-augroup ultisnips_custom
-  autocmd!
-  autocmd BufNewFile * silent! call typewriting#InsertSkeleton()
-augroup END
-
-function! typewriting#InsertSkeleton() abort
-  let filename = expand('%')
-
-  " Abort on non-empty buffer or extant file
-  if !(line('$') == 1 && getline('$') == '') || filereadable(filename)
-    return
-  endif
-
-  call s:try_insert('skel')
-endfunction
-
-function! s:try_insert(skel)
-  execute "normal! i_" . a:skel . "\<C-r>=UltiSnips#ExpandSnippet()\<CR>"
-
-  if g:ulti_expand_res == 0
-    silent! undo
-  endif
-
-  return g:ulti_expand_res
-endfunction
